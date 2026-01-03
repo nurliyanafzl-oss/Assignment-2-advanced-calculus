@@ -44,10 +44,49 @@ fig.add_trace(go.Scatter3d(
     x=[x_coord, x_coord + grad_x_val * 0.8], 
     y=[y_coord, y_coord + grad_y_val * 0.8],
     z=[z_coord, z_coord],
-    mode='lines+markers',
+    mode='lines',
     line=dict(color='yellow', width=12), 
     name="Gradient Direction"
 ))
 
+# Adding the Gradient Arrow Head (The Cone)
+fig.add_trace(go.Cone(
+    x=[x_coord + grad_x_val * 0.5],
+    y=[y_coord + grad_y_val * 0.5],
+    z=[z_coord],
+    u=[grad_x_val],
+    v=[grad_y_val],
+    w=[0],
+    sizemode="absolute",
+    sizeref=1,
+    colorscale=[[0, 'yellow'], [1, 'yellow']],
+    showscale=False,
+    name="Arrow Head"
+))
+
+# Update Layout for better viewing
+fig.update_layout(
+    scene=dict(
+        xaxis_title='X Axis',
+        yaxis_title='Y Axis',
+        zaxis_title='f(x,y)',
+        camera=dict(eye=dict(x=1.5, y=1.5, z=1.2))
+    ),
+        
+    margin=dict(l=0, r=0, b=0, t=0),
+    height=600
+)
+
+    st.plotly_chart(fig, use_container_width=True)
+
+except Exception as e:
+    st.error(f"Error in function: {e}. Please ensure you use Python math syntax (e.g., x**2 for x²).")
+
+st.markdown("---")
+st.caption("Developed for Advanced Calculus (MAT201) Assignment 2.")
+
+
+
 st.plotly_chart(fig)
+
 
