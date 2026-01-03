@@ -3,47 +3,51 @@ import numpy as np
 import plotly.graph_objects as go
 import sympy as sp
 
-st.set_page_config(page_title="MAT201 Calculus App")
-st.title("Aplikasi Visualisasi Gradien (MAT201)")
+# Page Config
+st.set_page_config(page_title="Calculus MAT201 - Gradient Visualizer")
 
-# Input Fungsi
-st.sidebar.header("Tetapan Input")
-equation = st.sidebar.text_input("Masukkan fungsi f(x, y):", "x**2 + y**2")
-x_point = st.sidebar.slider("Titik x:", -5.0, 5.0, 1.0)
-y_point = st.sidebar.slider("Titik y:", -5.0, 5.0, 1.0)
+# Application Title
+st.title("Gradient and Direction of Steepest Ascent Visualizer")
 
-# Pengiraan Matematik
+# Sidebar Input 
+st.sidebar.header("Input Settings")
+equation_input = st.sidebar.text_input("Enter function f(x, y):", "x**2 + y**2")
+x_coord = st.sidebar.slider("Point x:", -5.0, 5.0, 1.0)
+y_coord = st.sidebar.slider("Point y:", -5.0, 5.0, 1.0)
+
+# Mathematical Calculations
 x, y = sp.symbols('x y')
-f = sp.sympify(equation)
-fx = sp.diff(f, x)
-fy = sp.diff(f, y)
+f_sym = sp.sympify(equation_input)
+fx = sp.diff(f_sym, x)
+fy = sp.diff(f_sym, y)
 
-grad_x = float(fx.subs({x: x_point, y: y_point}))
-grad_y = float(fy.subs({x: x_point, y: y_point}))
+grad_x_val = float(fx.subs({x: x_coord, y: y_coord}))
+grad_y_val = float(fy.subs({x: x_coord, y: y_coord}))
 
-st.write(f"### Fungsi: $f(x, y) = {sp.latex(f)}$")
-st.write(f"Vektor Gradien pada titik ({x_point}, {y_point}) adalah:")
-st.latex(rf"\nabla f = \langle {grad_x:.2f}, {grad_y:.2f} \rangle")
+# Results Display
+st.write(f"### Function: $f(x, y) = {sp.latex(f_sym)}$")
+st.write(f"The Gradient Vector at point ({x_coord}, {y_coord}) is:")
+st.latex(rf"\nabla f = \langle {grad_x_val:.2f}, {grad_y_val:.2f} \rangle")
 
-# Visualisasi Plotly
+# Plotly 3D Visualization
 x_range = np.linspace(-5, 5, 50)
 y_range = np.linspace(-5, 5, 50)
-X, Y = np.meshgrid(x_range, y_range)
-f_func = sp.lambdify((x, y), f, 'numpy')
-Z = f_func(X, Y)
+X_grid, Y_grid = np.meshgrid(x_range, y_range)
+f_numpy = sp.lambdify((x, y), f_sym, 'numpy')
+Z_grid = f_numpy(X_grid, Y_grid)
 
-fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale='Viridis', opacity=0.8)])
-z_point = float(f.subs({x: x_point, y: y_point}))
+fig = go.Figure(data=[go.Surface(z=Z_grid, x=X_grid, y=Y_grid, colorscale='Viridis', opacity=0.8)])
+z_coord = float(f_sym.subs({x: x_coord, y: y_coord}))
 
-# Tambah anak panah gradien
+# Adding the Gradient Arrow (yellow line)
 fig.add_trace(go.Scatter3d(
-    x=[x_point, x_point + grad_x*0.2],
-    y=[y_point, y_point + grad_y*0.2],
-    z=[z_point, z_point],
+    x=[x_coord, x_coord + grad_x_val * 0.8], 
+    y=[y_coord, y_coord + grad_y_val * 0.8],
+    z=[z_coord, z_coord],
     mode='lines+markers',
-    line=dict(color='red', width=10),
-    name="Arah Gradien"
+    line=dict(color='yellow', width=12), 
+    marker=dict(size=6, symbol='cone'),
+    name="Gradient Direction"
 ))
-
 
 st.plotly_chart(fig)
