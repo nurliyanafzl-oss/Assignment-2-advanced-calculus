@@ -3,14 +3,14 @@ import numpy as np
 import plotly.graph_objects as go
 import sympy as sp
 
-# 1. Page Config
-st.set_page_config(page_title="Calculus MAT201 - Gradient Visualizer", layout="wide")
+# Page Config
+st.set_page_config(page_title="Advanced Calculus MAT201 - Gradient Visualizer", layout="wide")
 
-# 2. Application Title
-st.title("Gradient and Direction of Steepest Ascent Visualizer")
+# Application Title
+st.title("Gradient and Direction of Steepest Ascent Visualizer (MAT201)")
 st.write("This app visualizes how the gradient vector points in the direction of the steepest ascent on a 3D surface.")
 
-# 3. Sidebar Input 
+# Sidebar Input 
 st.sidebar.header("Input Settings")
 equation_input = st.sidebar.text_input("Enter function f(x, y):", "x**2 + y**2")
 x_coord = st.sidebar.slider("Point x:", -5.0, 5.0, 1.0)
@@ -27,11 +27,11 @@ try:
     grad_y_val = float(fy.subs({x: x_coord, y: y_coord}))
     z_coord = float(f_sym.subs({x: x_coord, y: y_coord}))
 
-    # 5. Results Display
+    # Results Display
     st.write(f"### Function: $f(x, y) = {sp.latex(f_sym)}$")
     st.latex(rf"\nabla f({x_coord}, {y_coord}) = \langle {grad_x_val:.2f}, {grad_y_val:.2f} \rangle")
 
-    # 6. Plotly 3D Visualization
+    # Plotly 3D Visualization
     x_range = np.linspace(-5, 5, 50)
     y_range = np.linspace(-5, 5, 50)
     X_grid, Y_grid = np.meshgrid(x_range, y_range)
@@ -78,4 +78,5 @@ except Exception as e:
     st.error(f"Error: {e}. Please check your function syntax.")
 
 st.divider()
-st.caption("Calculus MAT201 | Created with Streamlit and Plotly")
+st.caption("Advanced Calculus MAT201 | Created with Streamlit and Plotly")
+
