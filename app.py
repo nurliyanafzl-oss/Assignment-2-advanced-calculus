@@ -46,8 +46,8 @@ fig.add_trace(go.Scatter3d(
     z=[z_coord, z_coord],
     mode='lines+markers',
     line=dict(color='yellow', width=12), 
-    marker=dict(size=6, symbol='cone'),
     name="Gradient Direction"
 ))
 
 st.plotly_chart(fig)
+
