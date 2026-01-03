@@ -45,4 +45,5 @@ fig.add_trace(go.Scatter3d(
     name="Arah Gradien"
 ))
 
+
 st.plotly_chart(fig)
